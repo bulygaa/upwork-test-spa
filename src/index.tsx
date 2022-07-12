@@ -1,4 +1,4 @@
-import LeadsProvider from "context/Leads";
+import LeadsProvider from "context/Emails";
 import UserProvider from "context/User";
 import React from "react";
 import ReactDOM from "react-dom/client";

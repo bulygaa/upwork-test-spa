@@ -1,22 +1,26 @@
 import React from "react";
 
-export interface ILead {
+export type IEmail = {
   body: string;
   date: string;
   email_lead: string;
   status: string;
   subject: string;
-}
+};
 
-export interface ILeadsContext {
+export interface IEmailsContext {
   editable: boolean;
-  leads: ILead[];
+  emails: IEmail[];
   setEditable: React.Dispatch<React.SetStateAction<boolean>>;
-  pendingLead: ILead | null;
-  setPendingLead: React.Dispatch<React.SetStateAction<ILead | null>>
+  pendingEmail: IEmail | null;
+  setPendingEmail: React.Dispatch<React.SetStateAction<IEmail | null>>;
 }
 
-export enum LeadActions {
+export type EmailTotalByStatus = {
+  [k: string]: number;
+};
+
+export enum EmailStatuses {
   POSITIVE_REPLY = "POSITIVE_REPLY",
   NEUTRAL_REPLY = "NEUTRAL_REPLY",
   NOT_A_LEAD = "NOT_A_LEAD",
