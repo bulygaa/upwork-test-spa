@@ -1,5 +1,5 @@
 import { useDatabase } from "hooks/useDatabase";
-import React, { createContext, useCallback, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { IUser, IUserContext } from "types/User";
 
 export const UserContext = createContext({
@@ -7,10 +7,14 @@ export const UserContext = createContext({
   users: [],
 } as IUserContext);
 
-const UserProvider = ({ children }: any) => {
-  const { fetchUsers, getUsers, getActiveUser } = useDatabase();
+interface Props {
+  children: React.ReactNode;
+}
 
-  const [user, setUser] = useState<IUser | null>(getActiveUser());
+const UserProvider = ({ children }: Props) => {
+  const { fetchUsers, getUsers, userLogout } = useDatabase();
+
+  const [user, setUser] = useState<IUser | null>(null);
   const [users, setUsers] = useState<IUser[] | []>(getUsers());
 
   useEffect(() => {
@@ -20,10 +24,14 @@ const UserProvider = ({ children }: any) => {
     }
   }, [fetchUsers, users]);
 
+  const logout = () => {
+    if (!user) return;
+    userLogout(user.name);
+    setUser(null);
+  };
+
   return (
-    <UserContext.Provider
-      value={{ user, setUser, users }}
-    >
+    <UserContext.Provider value={{ user, setUser, users, logout }}>
       {children}
     </UserContext.Provider>
   );

@@ -1,6 +1,5 @@
 import LeadsPage from "pages/Leads";
 import LoginPage from "pages/Login";
-import React, { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Private from "routes/Private";
 import Public from "routes/Public";

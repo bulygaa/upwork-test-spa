@@ -29,7 +29,7 @@ export const useDatabase = () => {
       : null;
   }, [database]);
 
-  const setUsers = useCallback(
+  const updateUsers = useCallback(
     (users: IUser[]) => {
       database.setItem("users", JSON.stringify(users));
     },
@@ -54,15 +54,26 @@ export const useDatabase = () => {
     const dbLeads = getLeads();
 
     if (dbLeads) {
-      const pendingLead = dbLeads.find((lead) => lead.status === "pending");
+      const pendingLeads = dbLeads.filter((lead) => lead.status === "pending");
+      const randomIndex = Math.floor(Math.random() * pendingLeads.length);
 
-      if (pendingLead) return pendingLead;
-
-      return null;
+      return pendingLeads[randomIndex];
     }
 
     return null;
   }, [getLeads]);
+
+  const updateLeads = useCallback(
+    (lead: ILead) => {
+      const leads = getLeads();
+
+      database.setItem(
+        "leads",
+        JSON.stringify(leads.map((l) => (l.body === lead.body ? lead : l)))
+      );
+    },
+    [database, getLeads]
+  );
 
   const getUser = useCallback(
     (id: string): IUser | null => {
@@ -96,7 +107,7 @@ export const useDatabase = () => {
         return null;
       }
 
-      setUsers(
+      updateUsers(
         dbUsers.map((user: IUser) =>
           user.name === id ? { ...user, status: "active" } : user
         )
@@ -109,8 +120,18 @@ export const useDatabase = () => {
 
       return { ...activeUser, status: "active" };
     },
-    [getUser, database, getUsers, setUsers]
+    [getUser, database, getUsers, updateUsers]
   );
+
+  const userLogout = useCallback((id: string) => {
+    const dbUsers = getUsers();
+    database.removeItem("user");
+    updateUsers(
+      dbUsers.map((user: IUser) =>
+        user.name === id ? { ...user, status: "inactive" } : user
+      )
+    );
+  }, [getUsers, database, updateUsers]);
 
   return {
     fetchLeads,
@@ -123,5 +144,7 @@ export const useDatabase = () => {
     setActiveUser,
     getAvailableUsers,
     getPendingLead,
+    updateLeads,
+    userLogout,
   };
 };
