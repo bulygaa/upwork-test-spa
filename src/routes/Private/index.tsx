@@ -12,8 +12,6 @@ const Private: FC<Props> = ({ children }) => {
   const { getActiveUser } = useDatabase();
   const { user, setUser } = useUserContext();
 
-  console.log(user, '<<< user')
-
   useEffect(() => {
     if (!user || (user && user.status !== "active")) {
       const dbUser = getActiveUser();
@@ -23,7 +21,7 @@ const Private: FC<Props> = ({ children }) => {
 
       setUser(dbUser);
     }
-  }, [user, navigate]);
+  }, [user, navigate, setUser, getActiveUser]);
 
   return <>{children}</>;
 };

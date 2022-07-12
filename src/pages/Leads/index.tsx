@@ -1,19 +1,19 @@
 import Wrapper from "components/common/Wrapper";
 import Leads from "components/Leads";
 import { useDatabase } from "hooks/useDatabase";
-import { useLeadsContext } from "hooks/useLeadsContext";
+import { useEmailsContext } from "hooks/useEmailsContext";
 import React, { FC, useEffect } from "react";
 import Header from "./Header";
 import Modal from "./Modal";
 
 const LeadsPage: FC = () => {
-  const { editable, setPendingLead } = useLeadsContext()
-  const { getPendingLead } = useDatabase()
+  const { editable, setPendingEmail } = useEmailsContext()
+  const { getPendingEmail } = useDatabase()
 
   useEffect(() => {
-    const pendingLead = getPendingLead()
-    setPendingLead(pendingLead)
-  }, [setPendingLead])
+    const pendingLead = getPendingEmail()
+    setPendingEmail(pendingLead)
+  }, [setPendingEmail, getPendingEmail])
 
   return (
     <Wrapper header={<Header/>}>

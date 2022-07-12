@@ -13,11 +13,11 @@ const ButtonsContainer = styled.div`
   margin: 3rem 0;
 `;
 
-const LeadTitle = styled.span`
+const EmailTitle = styled.span`
   font-size: 2rem;
 `;
 
-const LeadContainer = styled.div`
+const EmailContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,13 +27,13 @@ const LeadContainer = styled.div`
   margin: 0 auto;
 `;
 
-const LeadSubject = styled.input`
+const EmailSubject = styled.input`
   width: calc(100% - 30px);
 
   padding: 15px;
 `;
 
-const LeadBody = styled.textarea`
+const EmailBody = styled.textarea`
   margin-top: 1rem;
 
   width: calc(100% - 30px);
@@ -47,7 +47,7 @@ const LeadBody = styled.textarea`
   padding: 15px;
 `;
 
-const EmptyLeads = styled.div`
+const EmptyEmails = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
@@ -56,11 +56,11 @@ const EmptyLeads = styled.div`
 const S = {
   Wrapper,
   ButtonsContainer,
-  LeadTitle,
-  LeadBody,
-  LeadContainer,
-  LeadSubject,
-  EmptyLeads
+  EmailTitle,
+  EmailBody,
+  EmailContainer,
+  EmailSubject,
+  EmptyEmails
 };
 
 export default S;

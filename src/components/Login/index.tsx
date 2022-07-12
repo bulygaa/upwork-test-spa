@@ -11,7 +11,7 @@ import S from "./styled";
 const Login: FC = () => {
   const navigate = useNavigate();
   const { setActiveUser, getAvailableUsers, getActiveUser } = useDatabase();
-  const { users, setUser } = useUserContext();
+  const { setUser } = useUserContext();
 
   const availableUsers = useMemo(
     () => getAvailableUsers(),
@@ -44,8 +44,8 @@ const Login: FC = () => {
           <Select
             styles={{ minWidth: "200px", width: "100%" }}
             options={
-              users
-                ? users.map((user: IUser) => ({
+              availableUsers.length
+                ? availableUsers.map((user: IUser) => ({
                     label: user.name,
                     value: user.name,
                   }))

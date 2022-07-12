@@ -1,8 +1,8 @@
 import Wrapper from 'components/common/Wrapper'
 import Login from 'components/Login'
-import React from 'react'
+import React, { FC } from 'react'
 
-const LoginPage = () => {
+const LoginPage: FC = () => {
   return (
     <Wrapper><Login/></Wrapper>
   )

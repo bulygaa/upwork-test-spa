@@ -52,13 +52,18 @@ const ModalTitle = styled.span`
 const ModalContent = styled.span``;
 const ModalActions = styled.span``;
 
+const HeaderActionsContainer = styled.div`
+  display: flex;
+`;
+
 const S = {
   HeaderWrapper,
   ModalWrapper,
   ModalContainer,
   ModalTitle,
   ModalContent,
-  ModalActions
+  ModalActions,
+  HeaderActionsContainer
 };
 
 export default S;

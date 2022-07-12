@@ -1,9 +1,9 @@
 import Button from "components/common/Button";
 import Typography from "components/common/Typography";
-import React from "react";
+import React, { FC } from "react";
 import S from "./styled";
 
-const Modal = () => {
+const Modal: FC = () => {
   const refreshPage = () => {
     window.location.reload();
   };
