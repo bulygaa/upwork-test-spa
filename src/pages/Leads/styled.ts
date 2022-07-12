@@ -1,19 +1,15 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-  height: 100%;
-`;
-
-const Header = styled.header`
-  width: 100%;
-  min-height: 60px;
+  padding: 10px 30px;
 `;
 
 const S = {
   Wrapper,
-  Header,
 };
 
 export default S;

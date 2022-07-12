@@ -1,4 +1,4 @@
-import { useDatabase } from "hooks/useDatabase";
+import { useUserContext } from "hooks/useUserContext";
 import React, { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -8,12 +8,10 @@ interface Props {
 
 const Private: FC<Props> = ({ children }) => {
   const navigate = useNavigate();
-  const { getActiveUser } = useDatabase()
-
-  const user = getActiveUser()
+  const { user } = useUserContext();
 
   useEffect(() => {
-    if (user && user.status !== 'active') return navigate("/login");
+    if (!user || (user && user.status !== "active")) return navigate("/login");
   }, [user, navigate]);
 
   return <>{children}</>;

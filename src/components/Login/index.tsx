@@ -1,20 +1,23 @@
 import Button from "components/common/Button";
 import Select from "components/common/Select";
 import { useDatabase } from "hooks/useDatabase";
-import React, { FormEvent, useEffect, useMemo } from "react";
+import { useUserContext } from "hooks/useUserContext";
+import React, { FC, FormEvent, useEffect, useMemo } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { IUser } from "types/User";
 import S from "./styled";
 
-const Login = () => {
+const Login: FC = () => {
   const navigate = useNavigate();
   const { setActiveUser, getAvailableUsers, getActiveUser } = useDatabase();
+  const { users, setUser } = useUserContext();
 
   const availableUsers = useMemo(
     () => getAvailableUsers(),
     [getAvailableUsers]
   );
-  const [user, setUser] = useState<string | null>(
+  const [userId, setUserId] = useState<string | null>(
     availableUsers?.length ? availableUsers[0].name : null
   );
 
@@ -26,8 +29,9 @@ const Login = () => {
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    if (user) {
-      setActiveUser(user);
+    if (userId) {
+      const res = setActiveUser(userId);
+      setUser(res);
       navigate("/leads");
     }
   };
@@ -40,14 +44,14 @@ const Login = () => {
           <Select
             styles={{ minWidth: "200px", width: "100%" }}
             options={
-              availableUsers?.length
-                ? availableUsers.map((user: any) => ({
+              users
+                ? users.map((user: IUser) => ({
                     label: user.name,
                     value: user.name,
                   }))
                 : []
             }
-            onChange={(e) => setUser(e.target.value as string)}
+            onChange={(e) => setUserId(e.target.value as string)}
           />
         </S.FormContent>
         <S.FormActions>
