@@ -1,3 +1,4 @@
+import { useDatabase } from "hooks/useDatabase";
 import React, { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -7,12 +8,12 @@ interface Props {
 
 const Private: FC<Props> = ({ children }) => {
   const navigate = useNavigate();
+  const { getActiveUser } = useDatabase()
 
-  const userStorage = localStorage.getItem("user");
-  const user: any = userStorage ? JSON.parse(userStorage) : null;
+  const user = getActiveUser()
 
   useEffect(() => {
-    if (!user?.isAuth) return navigate("/login");
+    if (user && user.status !== 'active') return navigate("/login");
   }, [user, navigate]);
 
   return <>{children}</>;
