@@ -7,34 +7,38 @@ import { ILead } from "types/Lead";
 export const useDatabase = () => {
   const database = localStorage;
 
-  const fetchUsers = useCallback((): void => {
+  const fetchUsers = useCallback((): IUser[] => {
     database.setItem("users", JSON.stringify(users));
+    return users;
   }, [database]);
 
-  const fetchLeads = useCallback((): void => {
+  const fetchLeads = useCallback((): ILead[] => {
     database.setItem("leads", JSON.stringify(leads));
+    return leads;
   }, [database]);
 
-  const getUsers = useCallback((): IUser[] | null => {
+  const getUsers = useCallback((): IUser[] | [] => {
     const dbUsers = database.getItem("users");
-    return dbUsers ? JSON.parse(dbUsers) : null;
+    return dbUsers ? JSON.parse(dbUsers) : [];
   }, [database]);
 
   const getAvailableUsers = useCallback((): IUser[] | null => {
     const dbUsers = database.getItem("users");
-    return dbUsers ? JSON.parse(dbUsers).filter((user: IUser) => user.status !== "active") : null;
+    return dbUsers
+      ? JSON.parse(dbUsers).filter((user: IUser) => user.status !== "active")
+      : null;
   }, [database]);
 
-  const setUsers = useCallback(
+  const updateUsers = useCallback(
     (users: IUser[]) => {
       database.setItem("users", JSON.stringify(users));
     },
     [database]
   );
 
-  const getLeads = useCallback((): ILead[] | null => {
-    const dbLeads = database.getItem("users");
-    return dbLeads ? JSON.parse(dbLeads) : null;
+  const getLeads = useCallback((): ILead[] | [] => {
+    const dbLeads = database.getItem("leads");
+    return dbLeads ? JSON.parse(dbLeads) : [];
   }, [database]);
 
   const getLead = useCallback(
@@ -46,11 +50,44 @@ export const useDatabase = () => {
     [getLeads]
   );
 
+  const getPendingLead = useCallback((): ILead | null => {
+    const dbLeads = getLeads();
+
+    if (dbLeads) {
+      const pendingLeads = dbLeads.filter((lead) => lead.status === "pending");
+      const randomIndex = Math.floor(Math.random() * pendingLeads.length);
+
+      return pendingLeads[randomIndex];
+    }
+
+    return null;
+  }, [getLeads]);
+
+  const updateLeads = useCallback(
+    (lead: ILead) => {
+      const leads = getLeads();
+
+      database.setItem(
+        "leads",
+        JSON.stringify(leads.map((l) => (l.body === lead.body ? lead : l)))
+      );
+    },
+    [database, getLeads]
+  );
+
   const getUser = useCallback(
     (id: string): IUser | null => {
       const dbUsers = getUsers();
 
-      return dbUsers ? dbUsers.find((user) => user.name === id)! : null;
+      if (dbUsers) {
+        const user = dbUsers.find((u) => u.name === id);
+
+        if (user) return user;
+
+        return null;
+      }
+
+      return null;
     },
     [getUsers]
   );
@@ -62,25 +99,39 @@ export const useDatabase = () => {
   }, [database]);
 
   const setActiveUser = useCallback(
-    (id: string): void => {
+    (id: string): IUser | null => {
       const dbUsers = getUsers();
       const activeUser = getUser(id);
 
-      setUsers(
-        dbUsers
-          ? dbUsers.map((user: IUser) =>
-              user.name === id ? { ...user, status: "active" } : user
-            )
-          : []
+      if (!activeUser || !dbUsers.length) {
+        return null;
+      }
+
+      updateUsers(
+        dbUsers.map((user: IUser) =>
+          user.name === id ? { ...user, status: "active" } : user
+        )
       );
 
       database.setItem(
         "user",
         JSON.stringify({ ...activeUser, status: "active" })
       );
+
+      return { ...activeUser, status: "active" };
     },
-    [getUser, database, getUsers, setUsers]
+    [getUser, database, getUsers, updateUsers]
   );
+
+  const userLogout = useCallback((id: string) => {
+    const dbUsers = getUsers();
+    database.removeItem("user");
+    updateUsers(
+      dbUsers.map((user: IUser) =>
+        user.name === id ? { ...user, status: "inactive" } : user
+      )
+    );
+  }, [getUsers, database, updateUsers]);
 
   return {
     fetchLeads,
@@ -92,5 +143,8 @@ export const useDatabase = () => {
     getActiveUser,
     setActiveUser,
     getAvailableUsers,
+    getPendingLead,
+    updateLeads,
+    userLogout,
   };
 };

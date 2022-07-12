@@ -1,3 +1,5 @@
+import LeadsProvider from "context/Leads";
+import UserProvider from "context/User";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -8,8 +10,12 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <UserProvider>
+      <LeadsProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </LeadsProvider>
+    </UserProvider>
   </React.StrictMode>
 );
