@@ -1,5 +1,6 @@
 import LeadsPage from "pages/Leads";
 import LoginPage from "pages/Login";
+import NotFound from "pages/NotFound";
 import OverviewPage from "pages/Overview";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Private from "routes/Private";
@@ -22,7 +23,7 @@ function App() {
         path="/overview"
         element={<Private children={<Private children={<OverviewPage />} />} />}
       />
-      <Route path="*" element={<div>NotFound Page</div>} />
+      <Route path="*" element={<Public children={<NotFound/>} />} />
     </Routes>
   );
 }
